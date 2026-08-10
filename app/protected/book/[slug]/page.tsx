@@ -1,4 +1,4 @@
-export const instant = false;
+
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -220,7 +220,7 @@ const used =
     <main className="min-h-screen bg-black text-white">
       <header className="border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link href="/" className="font-semibold tracking-[0.2em]">
+          <Link href="/protected" className="font-semibold tracking-[0.2em]">
             CHARTHOUSE STUDIOS
           </Link>
 

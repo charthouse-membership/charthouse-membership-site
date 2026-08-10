@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
+import Footer from "@/components/footer";
 
 const rooms = [
   {
@@ -64,7 +67,13 @@ const memberships = [
   },
 ];
 
-export default function Home() {
+async function HomeContent() {
+  const supabase = await createClient();
+  
+
+const {
+  data: { user },
+} = await supabase.auth.getUser();
   return (
     <main className="min-h-screen bg-[#080808] text-white">
 
@@ -97,19 +106,30 @@ export default function Home() {
               Membership
             </a>
 
-            <Link
-              href="/auth/login"
-              className="transition hover:text-white"
-            >
-              Sign in
-            </Link>
+           {user ? (
+  <Link
+    href="/protected"
+    className="rounded-full bg-[#d6a85f] px-5 py-2.5 font-semibold text-black transition hover:bg-[#e0b873]"
+  >
+    Member Dashboard
+  </Link>
+) : (
+  <>
+    <Link
+      href="/auth/login"
+      className="transition hover:text-white"
+    >
+      Sign in
+    </Link>
 
-            <Link
-              href="/auth/sign-up"
-              className="rounded-full bg-[#d6a85f] px-5 py-2.5 font-semibold text-black transition hover:bg-[#e0b873]"
-            >
-              Join
-            </Link>
+    <Link
+      href="/auth/sign-up"
+      className="rounded-full bg-[#d6a85f] px-5 py-2.5 font-semibold text-black transition hover:bg-[#e0b873]"
+    >
+      Join
+    </Link>
+  </>
+)}
           </nav>
 
         </div>
@@ -330,6 +350,14 @@ export default function Home() {
 
 
           {/* MEMBERSHIP OPTIONS */}
+          <div className="mb-6">
+  <a
+    href="#studios"
+    className="text-sm font-medium text-[#d6a85f] transition hover:text-white"
+  >
+    Explore the studios →
+  </a>
+</div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
 
             {memberships.map((membership) => (
@@ -476,45 +504,15 @@ export default function Home() {
       </section>
 
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 bg-black">
-
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-10 text-sm text-white/35 md:flex-row md:items-center md:justify-between">
-
-          <div>
-
-            <p className="font-medium uppercase tracking-[0.25em] text-white/50">
-              ChartHouse Studios
-            </p>
-
-            <p className="mt-2">
-              Creative spaces for music, content and media.
-            </p>
-
-          </div>
-
-          <div className="flex gap-6">
-
-            <Link
-              href="/auth/login"
-              className="transition hover:text-white"
-            >
-              Sign in
-            </Link>
-
-            <Link
-              href="/auth/sign-up"
-              className="transition hover:text-white"
-            >
-              Join
-            </Link>
-
-          </div>
-
-        </div>
-
-      </footer>
+      <Footer />
 
     </main>
+  );
+}
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
   );
 }

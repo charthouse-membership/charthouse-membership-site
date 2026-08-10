@@ -1,4 +1,4 @@
-export const instant = false;
+
 
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -451,7 +451,13 @@ export default async function ProtectedPage() {
       </span>
     </Link>
 
-
+<Link
+  href="/studios"
+  className="flex items-center justify-between rounded-full border border-white/20 px-6 py-3 text-sm text-white/70 transition hover:border-white/40 hover:text-white"
+>
+  <span>Explore Studios</span>
+  <span>→</span>
+</Link>
     <Link
       href="/protected"
       className="flex items-center justify-between rounded-full border border-white/20 px-6 py-4 text-sm font-semibold transition hover:bg-white/10"
