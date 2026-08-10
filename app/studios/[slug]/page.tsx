@@ -269,7 +269,7 @@ const studioImageSet = studioImages[slug] ?? [];
           </Link>
 
           <Link
-            href="/#studios"
+            href="/studios"
             className="text-sm text-white/50 transition hover:text-white"
           >
             ← All studios
@@ -305,7 +305,7 @@ const studioImageSet = studioImages[slug] ?? [];
             </Link>
 
             <Link
-              href="/#studios"
+              href="/studios"
               className="rounded-full border border-white/15 px-7 py-4 text-sm font-semibold transition hover:bg-white/10"
             >
               Explore all studios

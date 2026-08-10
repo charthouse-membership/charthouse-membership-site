@@ -258,15 +258,24 @@ export default async function ProtectedPage() {
                 </p>
               </div>
 
-              <Link
-                href="/protected/book"
-                className="inline-flex items-center justify-center rounded-full border border-[#d6a85f]/40 bg-[#d6a85f] px-8 py-4 text-sm font-semibold text-black transition hover:scale-[1.02] hover:bg-[#e0b873]"
-              >
-                Book a Studio
-                <span className="ml-3 text-base">
-                  →
-                </span>
-              </Link>
+              <div className="flex flex-col items-center">
+  <Link
+    href="/protected/book"
+    className="inline-flex items-center justify-center rounded-full border border-[#d6a85f] bg-[#d6a85f] px-8 py-4 text-sm font-semibold text-black transition hover:bg-[#e0b66d]"
+  >
+    Book a Studio
+    <span className="ml-3 text-base">
+      →
+    </span>
+  </Link>
+
+  <Link
+    href="/how-it-works?from=members"
+    className="mt-3 text-sm font-medium text-white/60 transition hover:text-white"
+  >
+    How it works →
+  </Link>
+</div>
 
             </div>
           </div>

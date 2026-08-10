@@ -190,11 +190,18 @@ const {
               </Link>
 
               <a
-                href="#studios"
-                className="rounded-full border border-white/20 px-7 py-4 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
-              >
-                Explore the studios
-              </a>
+  href="#studios"
+  className="rounded-full border border-white/20 px-7 py-4 text-sm font-semibold text-white transition"
+>
+  Explore the studios
+</a>
+
+<Link
+  href="/how-it-works"
+  className="rounded-full border border-white/20 px-7 py-4 text-sm font-semibold text-white transition hover:bg-white/10"
+>
+  How it works
+</Link>
 
             </div>
 
