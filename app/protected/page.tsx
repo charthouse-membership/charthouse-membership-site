@@ -22,6 +22,9 @@ export default async function ProtectedPage() {
     .select("*")
     .eq("id", user.id)
     .maybeSingle();
+    const membershipStatus = String(
+    profile?.membership_status ?? "inactive"
+  ).toLowerCase();
 
   const { data: bookings } = await supabase
     .from("bookings")
@@ -47,9 +50,10 @@ export default async function ProtectedPage() {
       ? new Date(profile.membership_period_start)
       : null;
 
-  const monthlyHours = Number(
-    profile?.monthly_hours ?? 4
-  );
+  const monthlyHours =
+  membershipStatus === "active"
+    ? Number(profile?.monthly_hours ?? 0)
+    : 0;
 
   const bonusHours = Number(
     profile?.bonus_hours ?? 0
@@ -110,9 +114,7 @@ export default async function ProtectedPage() {
           Date.now()
     ) ?? [];
 
-  const membershipStatus = String(
-    profile?.membership_status ?? "inactive"
-  ).toLowerCase();
+  
 
   async function cancelBooking(
     formData: FormData
@@ -332,9 +334,11 @@ export default async function ProtectedPage() {
               <div className="mt-8 border-t border-black/10 pt-6">
 
                 <p className="text-sm font-medium text-black/70">
-                  {hoursRemaining > 0
-                    ? "You've got studio time ready to use."
-                    : "You've used all your studio hours."}
+                  {membershipStatus !== "active"
+  ? "Choose a membership to get studio time."
+  : hoursRemaining > 0
+    ? "You've got studio time ready to use."
+    : "You've used all your studio hours."}
                 </p>
 
                 <p className="mt-2 text-sm leading-6 text-black/40">

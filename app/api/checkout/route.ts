@@ -3,12 +3,12 @@ import { NextResponse } from "next/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    const priceId = process.env.STRIPE_PRICE_ID;
+    const { priceId } = await request.json();
 
     if (!priceId) {
-      throw new Error("STRIPE_PRICE_ID is missing");
+      throw new Error("Stripe price ID is missing");
     }
 
     const session = await stripe.checkout.sessions.create({
