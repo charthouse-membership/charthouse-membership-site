@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { fromZonedTime } from "date-fns-tz";
 
 type Booking = {
   starts_at: string;
@@ -104,7 +105,10 @@ export default function BookingCalendar({
   function isTimeUnavailable(time: string) {
     if (!selectedDate) return true;
 
-    const start = new Date(`${selectedDate}T${time}:00`);
+    const start = fromZonedTime(
+  `${selectedDate}T${time}:00`,
+  "Europe/London"
+);
 
     const end = new Date(
       start.getTime() + duration * 60 * 60 * 1000

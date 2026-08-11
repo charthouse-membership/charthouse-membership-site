@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -8,13 +6,18 @@ type PageProps = {
   searchParams: Promise<{
     message?: string;
     error?: string;
+    q?: string;
   }>;
 };
 
 export default async function AdminMembersPage({
   searchParams,
 }: PageProps) {
-  const { message, error: pageError } = await searchParams;
+  const {
+    message,
+    error: pageError,
+    q = "",
+  } = await searchParams;
 
   const supabase = await createClient();
 
@@ -60,6 +63,20 @@ export default async function AdminMembersPage({
       credit_refunded,
       booking_type
     `);
+
+  const searchQuery = q.trim().toLowerCase();
+
+  const visibleMembers = (members ?? []).filter((member) => {
+    if (!searchQuery) return true;
+
+    const name = String(member.full_name ?? "").toLowerCase();
+    const email = String(member.email ?? "").toLowerCase();
+
+    return (
+      name.includes(searchQuery) ||
+      email.includes(searchQuery)
+    );
+  });
 
   function getUsedHours(userId: string) {
     return (
@@ -116,13 +133,22 @@ export default async function AdminMembersPage({
       redirect("/protected");
     }
 
-    const memberId = String(formData.get("memberId") ?? "");
+    const memberId = String(
+      formData.get("memberId") ?? ""
+    );
+
+    const fullName = String(
+      formData.get("fullName") ?? ""
+    ).trim();
+
     const membershipStatus = String(
       formData.get("membershipStatus") ?? ""
     );
+
     const monthlyHours = Number(
       formData.get("monthlyHours")
     );
+
     const bonusHours = Number(
       formData.get("bonusHours")
     );
@@ -163,6 +189,7 @@ export default async function AdminMembersPage({
     const { error } = await supabase
       .from("profiles")
       .update({
+        full_name: fullName || null,
         membership_status: membershipStatus,
         monthly_hours: monthlyHours,
         bonus_hours: bonusHours,
@@ -225,8 +252,8 @@ export default async function AdminMembersPage({
         </h1>
 
         <p className="mt-5 max-w-2xl text-lg text-white/45">
-          Manage membership status, monthly allowances and bonus
-          studio hours.
+          Manage member names, membership status, monthly
+          allowances and bonus studio hours.
         </p>
 
         {message && (
@@ -241,14 +268,50 @@ export default async function AdminMembersPage({
           </div>
         )}
 
-        <section className="mt-14">
-          {!members || members.length === 0 ? (
+        <form
+          method="get"
+          className="mt-10 flex flex-col gap-3 sm:flex-row"
+        >
+          <input
+            type="search"
+            name="q"
+            defaultValue={q}
+            placeholder="Search by member name or email"
+            className="w-full rounded-full border border-white/15 bg-white/[0.05] px-6 py-4 text-white outline-none placeholder:text-white/30 focus:border-white/40"
+          />
+
+          <button
+            type="submit"
+            className="rounded-full bg-white px-8 py-4 font-semibold text-black transition hover:bg-white/85"
+          >
+            Search
+          </button>
+
+          {searchQuery && (
+            <Link
+              href="/protected/admin/members"
+              className="rounded-full border border-white/20 px-8 py-4 text-center font-semibold text-white transition hover:border-white/40"
+            >
+              Clear
+            </Link>
+          )}
+        </form>
+
+        <p className="mt-4 text-sm text-white/35">
+          Showing {visibleMembers.length} of{" "}
+          {members?.length ?? 0} members
+        </p>
+
+        <section className="mt-10">
+          {visibleMembers.length === 0 ? (
             <div className="rounded-3xl border border-white/10 p-10 text-white/40">
-              No members found.
+              {searchQuery
+                ? "No members match that search."
+                : "No members found."}
             </div>
           ) : (
             <div className="space-y-5">
-              {members.map((member: any) => {
+              {visibleMembers.map((member: any) => {
                 const usedHours = getUsedHours(member.id);
                 const remainingHours =
                   getRemainingHours(member);
@@ -305,13 +368,27 @@ export default async function AdminMembersPage({
 
                       <form
                         action={updateMember}
-                        className="grid w-full gap-4 lg:max-w-2xl md:grid-cols-3"
+                        className="grid w-full gap-4 md:grid-cols-3 lg:max-w-3xl"
                       >
                         <input
                           type="hidden"
                           name="memberId"
                           value={member.id}
                         />
+
+                        <div className="md:col-span-3">
+                          <label className="text-sm text-white/45">
+                            Full name
+                          </label>
+
+                          <input
+                            type="text"
+                            name="fullName"
+                            defaultValue={member.full_name ?? ""}
+                            placeholder="Enter member’s full name"
+                            className="mt-2 w-full rounded-2xl border border-white/10 bg-black px-4 py-4"
+                          />
+                        </div>
 
                         <div>
                           <label className="text-sm text-white/45">

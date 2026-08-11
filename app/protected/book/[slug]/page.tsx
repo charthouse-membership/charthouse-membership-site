@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import BookingCalendar from "./booking-calendar";
+import { fromZonedTime } from "date-fns-tz";
 
 type PageProps = {
   params: Promise<{
@@ -166,7 +167,10 @@ const used =
       );
     }
 
-    const startsAt = new Date(`${date}T${time}:00`);
+    const startsAt = fromZonedTime(
+  `${date}T${time}:00`,
+  "Europe/London"
+);
     const endsAt = new Date(
       startsAt.getTime() + duration * 60 * 60 * 1000
     );
