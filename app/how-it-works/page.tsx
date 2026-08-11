@@ -72,11 +72,11 @@ export default async function HowItWorksPage({
                 title: "Arrive at ChartHouse",
                 text: "Come to 36–40 Middle Street, Old Portsmouth, Southsea, PO5 4BP and head to reception.",
               },
-              {
-                number: "06",
-                title: "We'll show you in",
-                text: "A member of the ChartHouse team will meet you, get you checked in and show you to your studio.",
-              },
+           {
+  number: "06",
+  title: "We'll get you started",
+  text: "On your first visit, a member of the ChartHouse team will show you to your studio and explain how to set up and use the included equipment.",
+},
             ].map((step) => (
               <div
                 key={step.number}
@@ -119,7 +119,37 @@ export default async function HowItWorksPage({
           </p>
         </div>
       </section>
+<section className="border-t border-white/10 bg-[#0d0d0d]">
+  <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
+    <p className="text-sm uppercase tracking-[0.25em] text-[#d6a85f]">
+      Dry hire and optional support
+    </p>
 
+    <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+      Use the room yourself, or bring in our team.
+    </h2>
+
+    <p className="mt-6 max-w-3xl text-base leading-7 text-white/50 md:text-lg">
+      All membership bookings are for dry hire of the room and its
+      included equipment. On your first visit, a member of the ChartHouse
+      team will show you how to set up and use the equipment safely.
+    </p>
+
+    <p className="mt-5 max-w-3xl text-base leading-7 text-white/50 md:text-lg">
+      If you require an engineer, sound technician, camera operator or
+      other production support for your session, this can be arranged for
+      an additional fee. Please contact us before booking so we can discuss
+      your requirements and check availability.
+    </p>
+
+    <a
+      href="mailto:info@charthousestudios.com?subject=Production support enquiry"
+      className="mt-8 inline-flex rounded-full bg-[#d6a85f] px-7 py-4 text-sm font-semibold text-black transition hover:bg-[#e0b873]"
+    >
+      Arrange production support →
+    </a>
+  </div>
+</section>
       <section className="border-t border-white/10 bg-white text-black">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-24">
           <p className="text-sm uppercase tracking-[0.25em] text-black/40">

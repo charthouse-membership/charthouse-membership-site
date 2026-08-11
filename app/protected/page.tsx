@@ -195,7 +195,7 @@ export default async function ProtectedPage() {
       <header className="border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
           <Link
-            href="/protected"
+           href="#schedule"
             className="text-sm font-semibold tracking-[0.25em]"
           >
             CHARTHOUSE
@@ -486,7 +486,7 @@ export default async function ProtectedPage() {
         </section>
 
         {/* UPCOMING BOOKINGS */}
-        <section className="mt-20 md:mt-28">
+<section id="schedule" className="scroll-mt-8 mt-20 md:mt-28">
   <div className="flex flex-col gap-4 border-b border-white/10 pb-7 md:flex-row md:items-end md:justify-between">
     <div>
       <p className="text-xs font-medium uppercase tracking-[0.3em] text-white/35">
@@ -728,9 +728,25 @@ export default async function ProtectedPage() {
     </div>
 
 
-    <p className="text-sm text-white/30">
-      Members • Artists • Creators
-    </p>
+    <div className="flex flex-col gap-3 text-sm text-white/30 md:items-end">
+  <p>Members • Artists • Creators</p>
+
+  <div className="flex gap-5 text-xs">
+    <Link
+      href="/privacy"
+      className="transition hover:text-white"
+    >
+      Privacy Policy
+    </Link>
+
+    <Link
+      href="/terms"
+      className="transition hover:text-white"
+    >
+      Terms & Conditions
+    </Link>
+  </div>
+</div>
 
   </div>
 

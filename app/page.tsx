@@ -90,7 +90,33 @@ const {
               Studios
             </p>
           </Link>
+          {/* MOBILE SIGN-IN CONTROLS */}
+          <div className="flex items-center gap-3 md:hidden">
+            {user ? (
+              <Link
+                href="/protected"
+                className="rounded-full bg-[#d6a85f] px-4 py-2 text-xs font-semibold text-black"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="text-xs font-medium text-white"
+                >
+                  Sign in
+                </Link>
 
+                <Link
+                  href="/auth/sign-up"
+                  className="rounded-full bg-[#d6a85f] px-4 py-2 text-xs font-semibold text-black"
+                >
+                  Join
+                </Link>
+              </>
+            )}
+          </div>
           <nav className="hidden items-center gap-8 text-sm text-white/60 md:flex">
             <a
               href="#studios"

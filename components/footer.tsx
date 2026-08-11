@@ -84,9 +84,20 @@ export default function Footer() {
           <p>© 2026 ChartHouse Studios</p>
 
           <div className="flex gap-5">
-            <span>Privacy Policy</span>
-            <span>Terms & Conditions</span>
-          </div>
+  <Link
+    href="/privacy"
+    className="transition hover:text-white"
+  >
+    Privacy Policy
+  </Link>
+
+  <Link
+    href="/terms"
+    className="transition hover:text-white"
+  >
+    Terms & Conditions
+  </Link>
+</div>
         </div>
       </div>
     </footer>
