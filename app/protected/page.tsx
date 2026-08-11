@@ -462,22 +462,18 @@ export default async function ProtectedPage() {
 
 <Link
   href="/studios"
-  className="flex items-center justify-between rounded-full border border-white/20 px-6 py-3 text-sm text-white/70 transition hover:border-white/40 hover:text-white"
+  className="flex items-center justify-between rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white/70 transition hover:border-white/40 hover:text-white"
 >
   <span>Explore Studios</span>
   <span>→</span>
 </Link>
-    <Link
-      href="/protected"
-      className="flex items-center justify-between rounded-full border border-white/20 px-6 py-4 text-sm font-semibold transition hover:bg-white/10"
-    >
-      <span>
-        View Schedule
-      </span>
-      <span>
-        →
-      </span>
-    </Link>
+    <a
+  href="#schedule"
+  className="flex items-center justify-between rounded-full border border-white/20 px-6 py-4 text-sm font-semibold text-white/70 transition hover:border-white/40 hover:text-white"
+>
+  <span>View Schedule</span>
+  <span>→</span>
+</a>
 
   </div>
 
