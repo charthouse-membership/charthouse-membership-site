@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import MembershipCheckoutButton from "@/components/membership-checkout-button";
 import ManageMembershipButton from "@/components/manage-membership-button";
+import { LogoutButton } from "@/components/logout-button";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
@@ -209,6 +210,7 @@ export default async function ProtectedPage() {
             <p className="mt-1 text-sm text-white/60">
               {user.email}
             </p>
+            <LogoutButton />
           </div>
         </div>
       </header>
