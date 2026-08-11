@@ -3,14 +3,47 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const siteUrl = "https://charthousemembership.com";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  metadataBase: new URL(siteUrl),
+
+  title: {
+    default: "ChartHouse Membership",
+    template: "%s | ChartHouse Membership",
+  },
+
+  description:
+    "Flexible monthly access to six professional creative studios for music, podcasts, DJ practice, live content, photography and video.",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    title: "ChartHouse Membership",
+    description:
+      "Your space. Your sound. Your content. Flexible monthly access to six professional creative studios.",
+    url: siteUrl,
+    siteName: "ChartHouse Membership",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "ChartHouse Membership",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "ChartHouse Membership",
+    description:
+      "Flexible monthly access to six professional creative studios.",
+    images: ["/twitter-image.png"],
+  },
 };
 
 const geistSans = Geist({
