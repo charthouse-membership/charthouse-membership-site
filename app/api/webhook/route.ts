@@ -20,12 +20,20 @@ const supabaseAdmin = createClient(
 
 function getMonthlyHours(priceId: string): number {
   const hoursByPrice: Record<string, number> = {
-    "price_1U2XzxGPuFHpS79dqLtzL2kG": 4,
-    "price_1U2Y1NGPuFHpS79dv4gIfwRG": 8,
-    "price_1U2Y2CGPuFHpS79dEcVA3XrE": 12,
+    "price_1U3JbJGPuFHpS79dXBil4qZ9": 4,
+    "price_1U3JcLGPuFHpS79dE5w83NQe": 8,
+    "price_1U3JcQGPuFHpS79dNmuxixK5": 12,
   };
 
-  return hoursByPrice[priceId] ?? 4;
+  const monthlyHours = hoursByPrice[priceId];
+
+  if (!monthlyHours) {
+    throw new Error(
+      `Unknown Stripe membership price: ${priceId}`
+    );
+  }
+
+  return monthlyHours;
 }
 
 // ------------------------------------------------------------
@@ -175,85 +183,75 @@ async function processPaidInvoice(
       "NO CUSTOMER EMAIL FOUND FOR INVOICE:",
       invoice.id
     );
-
     return;
   }
-
-  // ----------------------------------------------------------
-  // GET PERIOD START
-  // ----------------------------------------------------------
 
   const periodStart =
-    invoice.lines.data[0]?.period?.start ??
-    invoice.period_start;
+  invoice.lines.data[0]?.period?.start ??
+  invoice.period_start;
 
-  // ----------------------------------------------------------
-  // GET SUBSCRIPTION ID
-  // ----------------------------------------------------------
+const invoiceWithSubscription =
+  invoice as Stripe.Invoice & {
+    subscription?:
+      | string
+      | Stripe.Subscription
+      | null;
 
-  const subscriptionId =
-    typeof invoice.parent?.subscription_details?.subscription ===
-      "string"
-      ? invoice.parent.subscription_details.subscription
-      : null;
-
-  if (!subscriptionId) {
-    console.error(
-      "NO SUBSCRIPTION ID FOUND:",
-      invoice.id
-    );
-
-    return;
-  }
-
-  // ----------------------------------------------------------
-  // GET CURRENT SUBSCRIPTION
-  // ----------------------------------------------------------
-
-  const subscription =
-    await stripe.subscriptions.retrieve(
-      subscriptionId
-    );
-
-  // ----------------------------------------------------------
-  // GET CURRENT PRICE ID
-  // ----------------------------------------------------------
-
-  const currentPriceId =
-    subscription.items.data[0]?.price?.id;
-
-  if (!currentPriceId) {
-    console.error(
-      "NO CURRENT SUBSCRIPTION PRICE FOUND:",
-      subscription.id
-    );
-
-    return;
-  }
-
-  // ----------------------------------------------------------
-  // GET MONTHLY HOURS FROM PRICE
-  // ----------------------------------------------------------
-
-  const monthlyHours =
-    getMonthlyHours(currentPriceId);
-
-  // ----------------------------------------------------------
-  // PREPARE SUPABASE UPDATE
-  // ----------------------------------------------------------
-
-  const updateData: {
-    membership_status: string;
-    monthly_hours: number;
-    membership_period_start?: string;
-  } = {
-    membership_status: "active",
-    monthly_hours: monthlyHours,
+    parent?: {
+      subscription_details?: {
+        subscription?:
+          | string
+          | Stripe.Subscription
+          | null;
+      } | null;
+    } | null;
   };
 
-  // ----------------------------------------------------------
-  // UPDATE MEMBERSHIP PERIOD START
-  // ----------------------------------------------------------
+const subscriptionValue =
+  invoiceWithSubscription.parent
+    ?.subscription_details?.subscription ??
+  invoiceWithSubscription.subscription;
+
+const subscriptionId =
+  typeof subscriptionValue === "string"
+    ? subscriptionValue
+    : subscriptionValue?.id;
+
+if (!subscriptionId) {
+  console.error(
+    "NO SUBSCRIPTION ID FOUND:",
+    invoice.id
+  );
+  return;
+}
+
+const subscription =
+  await stripe.subscriptions.retrieve(
+    subscriptionId
+  );
+
+const currentPriceId =
+  subscription.items.data[0]?.price?.id;
+
+if (!currentPriceId) {
+  console.error(
+    "NO CURRENT SUBSCRIPTION PRICE FOUND:",
+    subscription.id
+  );
+  return;
+}
+
+const monthlyHours =
+  getMonthlyHours(currentPriceId);
+
+const updateData: {
+  membership_status: string;
+  monthly_hours: number;
+  membership_period_start?: string;
+} = {
+  membership_status: "active",
+  monthly_hours: monthlyHours,
+};
 
   if (periodStart) {
     updateData.membership_period_start =
@@ -261,10 +259,6 @@ async function processPaidInvoice(
         periodStart * 1000
       ).toISOString();
   }
-
-  // ----------------------------------------------------------
-  // UPDATE SUPABASE
-  // ----------------------------------------------------------
 
   const { error } = await supabaseAdmin
     .from("profiles")
@@ -276,14 +270,12 @@ async function processPaidInvoice(
       "SUPABASE PAID INVOICE UPDATE ERROR:",
       error
     );
-
     throw error;
   }
 
   console.log(
     "PAID INVOICE SUCCESSFULLY UPDATED MEMBERSHIP:",
-    email,
-    updateData
+    email
   );
 }
 
@@ -536,6 +528,7 @@ export async function POST(
         invoice.id
       );
     }
+
   } catch (error) {
     console.error(
       "WEBHOOK PROCESSING ERROR:",

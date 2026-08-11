@@ -6,17 +6,17 @@ const MEMBERSHIPS = [
   {
     hours: 4,
     price: "£30",
-    priceId: "price_1U2XzxGPuFHpS79dqLtzL2kG",
+    priceId: "price_1U3JbJGPuFHpS79dXBil4qZ9",
   },
   {
     hours: 8,
     price: "£50",
-    priceId: "price_1U2Y1NGPuFHpS79dv4gIfwRG",
+    priceId: "price_1U3JcLGPuFHpS79dE5w83NQe",
   },
   {
     hours: 12,
     price: "£70",
-    priceId: "price_1U2Y2CGPuFHpS79dEcVA3XrE",
+    priceId: "price_1U3JcQGPuFHpS79dNmuxixK5",
   },
 ];
 
